@@ -83,18 +83,19 @@ abstract class AbstractAopRequest extends AbstractRequest
     {
         if (strtoupper($this->getSignType()) === 'RSA2') {
             $alipayRootCert = $this->getAlipayRootCert();
-            $appCert = $this->getAppCert();
-            if (is_file($alipayRootCert) && is_file($appCert)) {
+            if (is_file($alipayRootCert)) {
                 $this->setParameter('alipay_root_cert_sn', getRootCertSN($alipayRootCert));
-                $this->setParameter('app_cert_sn', getCertSN($appCert));
             }
+
+            $appCert = $this->getAppCert();
+            $this->setParameter('app_cert_sn', getCertSN($appCert));
         }
     }
 
 
     protected function setDefaults()
     {
-        if (! $this->getTimestamp()) {
+        if (!$this->getTimestamp()) {
             $this->setTimestamp(date('Y-m-d H:i:s'));
         }
     }
@@ -616,7 +617,7 @@ abstract class AbstractAopRequest extends AbstractRequest
         }
 
         foreach (func_get_args() as $key) {
-            if (! array_has($data, $key)) {
+            if (!array_has($data, $key)) {
                 throw new InvalidRequestException("The biz_content $key parameter is required");
             }
         }
@@ -655,11 +656,11 @@ abstract class AbstractAopRequest extends AbstractRequest
 
     protected function filter($data)
     {
-        if (! $this->returnable) {
+        if (!$this->returnable) {
             unset($data['return_url']);
         }
 
-        if (! $this->notifiable) {
+        if (!$this->notifiable) {
             unset($data['notify_url']);
         }
     }
@@ -681,7 +682,7 @@ abstract class AbstractAopRequest extends AbstractRequest
         foreach ($keys as $key) {
             $value = $this->parameters->get($key);
 
-            if (! empty($value)) {
+            if (!empty($value)) {
                 $allEmpty = false;
                 break;
             }
