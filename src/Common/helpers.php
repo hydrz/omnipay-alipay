@@ -136,7 +136,7 @@ if (!function_exists('getCertSN')) {
             if (is_file($cert)) {
                 $cert = file_get_contents($cert);
             }
-            $ssl = openssl_x509_parse($cert);
+            $ssl = openssl_x509_parse(trim($cert));
         }
 
         if (strpos($ssl['serialNumber'], '0x') === 0) {
